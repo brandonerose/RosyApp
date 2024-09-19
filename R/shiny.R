@@ -1,3 +1,4 @@
+#' @import RosyUtils
 #' @import golem
 #' @import shiny
 #' @import shinydashboard
@@ -16,6 +17,8 @@ dbSidebar <- function(...){
     TCD_SBF()
   )
 }
+#' @title backend_menu_item
+#' @export
 backend_menu_item <- function(){
   if(golem::app_prod())return(NULL)
   return(
@@ -109,6 +112,8 @@ mod_list_server <- function(id,values){
     })
   })
 }
+#' @title TCD_SBH
+#' @export
 TCD_SBH <- function(){
   shinydashboard::sidebarMenu(
     shiny::div(
@@ -121,6 +126,8 @@ TCD_SBH <- function(){
     )
   )
 }
+#' @title TCD_SBF
+#' @export
 TCD_SBF <- function(){
   shinydashboard::sidebarMenu(
     shinydashboard::menuItem(
@@ -157,6 +164,8 @@ TCD_SBF <- function(){
   # p(paste0('Version: ',pkg_version)) %>% shiny::div(style="text-align:center"),
   # p(paste0('Last Update: ',pkg_date)) %>% shiny::div(style="text-align:center"),
 }
+#' @title TCD_NF
+#' @export
 TCD_NF <- function(){
   shinydashboardPlus::dashboardFooter(
     left = fluidRow(
@@ -198,6 +207,8 @@ TCD_NF <- function(){
     right = NULL
   )
 }
+#' @title TCD_SF
+#' @export
 TCD_SF <- function(){
   shiny::div(
     class = "sticky_footer",
@@ -237,5 +248,39 @@ TCD_SF <- function(){
         onclick ="window.open('https://www.thecodingdocs.com/founder', '_blank')"
       )
     )
+  )
+}
+#' @title make_DT_table
+#' @export
+make_DT_table<-function(DF,selection="single"){
+  # %>% DT::formatStyle(
+  #   colnames(DF),
+  #   color = "#000"
+  # )
+  if(!is_something(DF)){
+    return(h3("No data available to display."))
+  }
+  DF %>% DT::datatable(
+    selection = selection,
+    editable = F,
+    rownames = F,
+    options = list(
+      columnDefs = list(list(className = 'dt-center',targets = "_all")),
+      paging = T,
+      pageLength = 50,
+      fixedColumns = TRUE,
+      ordering = TRUE,
+      scrollY = "300px",
+      scrollX = T,
+      # autoWidth = T,
+      searching = T,
+      dom = 'frtip',
+      # buttons = c('csv', 'excel',"pdf"),
+      scrollCollapse = F,
+      stateSave = F
+    ),
+    class = "cell-border",
+    filter = 'top',
+    escape =F
   )
 }
