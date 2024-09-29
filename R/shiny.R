@@ -252,17 +252,13 @@ TCD_SF <- function(){
 }
 #' @title make_DT_table
 #' @export
-make_DT_table<-function(DF,selection="single"){
-  # %>% DT::formatStyle(
-  #   colnames(DF),
-  #   color = "#000"
-  # )
+make_DT_table<-function(DF,editable = F,selection="single"){
   if(!is_something(DF)){
     return(h3("No data available to display."))
   }
   DF %>% DT::datatable(
     selection = selection,
-    editable = F,
+    editable = editable,
     rownames = F,
     options = list(
       columnDefs = list(list(className = 'dt-center',targets = "_all")),
@@ -282,5 +278,8 @@ make_DT_table<-function(DF,selection="single"){
     class = "cell-border",
     filter = 'top',
     escape =F
+  ) %>% DT::formatStyle(
+    colnames(DF),
+    color = "#000"
   )
 }

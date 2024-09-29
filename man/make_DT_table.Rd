@@ -4,7 +4,7 @@
 \alias{make_DT_table}
 \title{make_DT_table}
 \usage{
-make_DT_table(DF, selection = "single")
+make_DT_table(DF, editable = F, selection = "single")
 }
 \description{
 make_DT_table
