@@ -12,8 +12,8 @@ create_node_edge <- function(){
   fontcolor <- "black"
   instrument_color <- "#FF474C"
 }
-node_aes_names_DiagrammR <- function(){
-  c(
+node_aes_names_DiagrammR <- function(all = F){
+  c(#write conversion
     "shape",
     "style",
     "penwidth",
@@ -42,8 +42,8 @@ node_aes_names_DiagrammR <- function(){
     "margin"
   )
 }
-edge_aes_names_DiagrammR <- function(){
-  c(
+edge_aes_names_DiagrammR <- function(all = F){
+  c(#write conversion
     "style",
     "penwidth",
     "color",
@@ -78,10 +78,14 @@ edge_aes_names_DiagrammR <- function(){
     "decorate"
   )
 }
-node_aes_names_visNetwork <- function(){
-  c(
+node_aes_names_visNetwork <- function(all = F){
+  #?visNetwork::visNodes()
+  OUT <- c(
     "id",
+    "label",
     "shape",
+    "group",
+    "level",
     # The types with the label inside of it are:
     # ... ellipse, circle, database, box, text
     # The ones with the label outside of it are:
@@ -89,60 +93,72 @@ node_aes_names_visNetwork <- function(){
     "size",
     "title",
     "value",
-    "x",
-    "y",
-    "label",
-    "level",
-    "group",
-    "hidden",
-    "image",
-    "mass",
-    "physics",
-    "borderWidth",
-    "borderWidthSelected",
-    "brokenImage",
-    "labelHighlightBold",
-    "color",
-    "opacity",
-    "fixed",
-    "font",
-    "icon",
-    "shadow",
-    "scaling",
-    "shapeProperties",
-    "heightConstraint",
-    "widthConstraint",
-    "margin",
-    "chosen",
-    "imagePadding",
-    "ctxRenderer"
+    "physics"
   )
+  if(all){
+    OUT <- OUT %>% append(
+      c(
+        "font",
+        "color",
+        "opacity",
+        "fixed",
+        "mass",
+        "x",
+        "y",
+        "hidden",
+        "image",
+        "borderWidth",
+        "borderWidthSelected",
+        "brokenImage",
+        "labelHighlightBold",
+        "icon",
+        "shadow",
+        "scaling",
+        "shapeProperties",
+        "heightConstraint",
+        "widthConstraint",
+        "margin",
+        "chosen",
+        "imagePadding",
+        "ctxRenderer"
+      )
+    )
+  }
+  return(OUT)
 }
-edge_aes_names_visNetwork <- function(){
-  c(
-    "title",
-    "value",
-    "label",
-    "length",
-    "width",
-    "dashes",
-    "hidden",
-    "hoverWidth",
+edge_aes_names_visNetwork <- function(all = F){
+  #?visNetwork::visEdges()
+  OUT <- c(
     "id",
-    "physics",
-    "selectionWidth",
-    "selfReferenceSize",
-    "selfReference",
-    "labelHighlightBold",
-    "color",
-    "font",
+    "from",
     "arrows",
-    "arrowStrikethrough",
-    "smooth",
-    "shadow",
-    "scaling",
-    "widthConstraint",
-    "chosen",
-    "endPointOffset"
+    "to",
+    "label",
+    "title",
+    "dashes",
+    "physics"
   )
+  if(all){
+    OUT <- OUT %>% append(
+      "color",
+      "font",
+      "value",
+      "length",
+      "width",
+      "hidden",
+      "hoverWidth",
+      "selectionWidth",
+      "selfReferenceSize",
+      "selfReference",
+      "labelHighlightBold",
+      "arrowStrikethrough",
+      "smooth",
+      "shadow",
+      "scaling",
+      "widthConstraint",
+      "chosen",
+      "endPointOffset"
+    )
+  }
+  return(OUT)
 }
