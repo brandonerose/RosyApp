@@ -140,24 +140,26 @@ edge_aes_names_visNetwork <- function(all = F){
   )
   if(all){
     OUT <- OUT %>% append(
-      "color",
-      "font",
-      "value",
-      "length",
-      "width",
-      "hidden",
-      "hoverWidth",
-      "selectionWidth",
-      "selfReferenceSize",
-      "selfReference",
-      "labelHighlightBold",
-      "arrowStrikethrough",
-      "smooth",
-      "shadow",
-      "scaling",
-      "widthConstraint",
-      "chosen",
-      "endPointOffset"
+      c(
+        "color",
+        "font",
+        "value",
+        "length",
+        "width",
+        "hidden",
+        "hoverWidth",
+        "selectionWidth",
+        "selfReferenceSize",
+        "selfReference",
+        "labelHighlightBold",
+        "arrowStrikethrough",
+        "smooth",
+        "shadow",
+        "scaling",
+        "widthConstraint",
+        "chosen",
+        "endPointOffset"
+      )
     )
   }
   return(OUT)
