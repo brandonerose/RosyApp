@@ -4,7 +4,14 @@
 \alias{make_DT_table}
 \title{make_DT_table}
 \usage{
-make_DT_table(DF, editable = F, selection = "single")
+make_DT_table(
+  DF,
+  editable = F,
+  selection = "single",
+  paging = TRUE,
+  scrollY = F,
+  searching = T
+)
 }
 \description{
 make_DT_table
