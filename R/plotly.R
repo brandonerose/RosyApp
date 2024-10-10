@@ -64,6 +64,8 @@ plotly_bar<-function(df,x_col,y_col,name){
     ) %>% plotly::style(hoverinfo = 'none')
   fig
 }
+#' @title plotify
+#' @export
 plotify<-function(GG){
   GG %>% plotly::ggplotly(tooltip = "text") %>%
     plotly::config(scrollZoom=F, displaylogo = F,
