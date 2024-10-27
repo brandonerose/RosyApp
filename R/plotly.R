@@ -1,4 +1,6 @@
 #' @import RosyUtils
+#' @title plotly_bar
+#' @export
 plotly_bar<-function(df,x_col,y_col,name){
   fig <- plotly::plot_ly(
     df,
@@ -63,6 +65,88 @@ plotly_bar<-function(df,x_col,y_col,name){
                    yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = T)
     ) %>% plotly::style(hoverinfo = 'none')
   fig
+}
+#' @title plotly_parcats
+#' @export
+plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T){
+  line_shape <- "linear"
+  if(line_shape_curved)line_shape <- "hspline"
+  if(remove_missing){
+    DF <- na.omit(DF)
+  }else{
+    DF <- DF %>% lapply(function(col){
+      OUT <- col
+      if(is.factor(OUT))levels(OUT)<- c(levels(OUT),"*Missing*")
+      OUT[which(is.na(OUT))] <- "*Missing*"
+      return(OUT)
+    }) %>% as.data.frame()
+  }
+  adj_margins_l <- adjust_margins(max(nchar(as.character(DF[[1]]))))
+  adj_margins_r <- adjust_margins(max(nchar(as.character(DF[[ncol(DF)]]))))
+  color_palette <- RColorBrewer::brewer.pal(12, "Paired")  # Using 3 colors for "High", "Medium", "Low"
+  color_palette_vec <- color_palette %>% sample(size = length(unique(DF[[1]])),replace =  length(unique(DF[[1]])))
+  fig <- plotly::plot_ly(
+    # data = DF,
+    # x = x_col,
+    # y = y_col,
+    type = 'parcats',
+    dimensions = lapply(colnames(DF), function(col) {
+      label = col
+      new_label <- attr(DF[[col]],"label")
+      if(!is.null(new_label))label <- new_label
+      if(is.factor(DF[[col]])){
+        categoryarray <- levels(DF[[col]])
+      }else{
+        categoryarray <- as.character(unique(DF[[col]]))
+      }
+      out_list <-  list(
+        values = DF[[col]],
+        label = label,
+        categoryorder = "array",
+        categoryarray = categoryarray
+      )
+      return(out_list)
+    }),
+    line = list(
+      shape = line_shape,
+      color = color_palette_vec[as.numeric(DF[[1]])]  # Use the numeric representation for colors
+      # colorscale = colorscale,  # Define the new colorscale
+      # cmin =min(as.numeric(DF[[1]])),  # Set min for color scaling
+      # cmax = max(as.numeric(DF[[1]]))   # Set max for color scaling
+    ),
+    arrangement = "freeform",
+    # name = name,
+    # text=x_col,
+    # textposition="inside",
+    # insidetextanchor="middle",
+    # insidetextfont=list(color="black"),
+    labelfont = list(
+      size=14,
+      color="black"
+    ),
+    tickfont = list(
+      size=12,
+      color="black"
+    )
+  ) %>%
+    plotly::config(
+      # scrollZoom=T,
+      displaylogo = F
+    ) %>%
+    plotly::layout(
+      showlegend = F,
+      margin = list(
+        l = adj_margins_l,
+        r = adj_margins_r
+      )
+      #l = 100, r = 100)
+    ) %>% plotly::style(hoverinfo = 'none')
+  return(fig)
+}
+adjust_margins <- function(max_label_length, tick_font_size = 12, base_margin = 20) {
+  extra_margin <- max_label_length * tick_font_size * 0.4  # Adjust multiplier as needed
+  out <- base_margin + extra_margin
+  return(out)
 }
 #' @title plotify
 #' @export

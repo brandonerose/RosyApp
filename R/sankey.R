@@ -3,19 +3,22 @@
 #' @export
 make_parcats<-function(
     DF,
-    variables,
+    remove_missing = F,
     marginal_histograms = T
 ){
-  if(!is_something(variables))return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
+  if(remove_missing){
+    DF <- na.omit(DF)
+  }
   colnames(DF) <-  colnames(DF) %>% lapply(function(col) {
     x<- attr(DF[[col]], "label")
     ifelse(is.null(x),col,x)
   }) %>% unlist()
   parcats::parcats(
-    easyalluvial::alluvial_wide(DF),
+    easyalluvial::alluvial_wide(DF,NA_label = "*Missing*"),
     marginal_histograms = marginal_histograms,
     data_input = DF,
-    labelfont=list(size = 10),
+    labelfont=list(size = 12,color = "black"),
+    tickfont=list(size = 12,color = "black"),
     arrangement = "freeform"
   )
 }

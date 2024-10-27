@@ -18,6 +18,7 @@ Imports:
     magrittr,
     parcats,
     plotly,
+    RColorBrewer,
     RosyUtils,
     shiny,
     shinydashboard,
