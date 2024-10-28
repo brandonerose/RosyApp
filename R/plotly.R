@@ -68,8 +68,13 @@ plotly_bar<-function(df,x_col,y_col,name){
 }
 #' @title plotly_parcats
 #' @export
-plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T){
+plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T, numeric_to_factor = T,quantiles = 5){
   line_shape <- "linear"
+  the_labels <- DF %>% names() %>% sapply(function(col){
+    out <- attr(DF[[col]],"label")
+    if(!is.null(out))return(out)
+    return(col)
+    }) %>% as.character()
   if(line_shape_curved)line_shape <- "hspline"
   if(remove_missing){
     DF <- na.omit(DF)
@@ -81,6 +86,19 @@ plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T){
       return(OUT)
     }) %>% as.data.frame()
   }
+  DF <- DF %>% lapply(function(col){
+    OUT <- col
+    if(!is.factor(OUT)){
+      if(is.numeric(OUT)){
+        if(numeric_to_factor){
+          OUT <- OUT %>% numeric_to_cats(method = "quantile", quantiles = quantiles)
+        }
+      }else{
+        OUT <- as.factor(OUT)
+      }
+    }
+    return(OUT)
+  }) %>% as.data.frame()
   adj_margins_l <- adjust_margins(max(nchar(as.character(DF[[1]]))))
   adj_margins_r <- adjust_margins(max(nchar(as.character(DF[[ncol(DF)]]))))
   color_palette <- RColorBrewer::brewer.pal(12, "Paired")  # Using 3 colors for "High", "Medium", "Low"
@@ -91,9 +109,7 @@ plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T){
     # y = y_col,
     type = 'parcats',
     dimensions = lapply(colnames(DF), function(col) {
-      label = col
-      new_label <- attr(DF[[col]],"label")
-      if(!is.null(new_label))label <- new_label
+
       if(is.factor(DF[[col]])){
         categoryarray <- levels(DF[[col]])
       }else{
@@ -101,7 +117,7 @@ plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T){
       }
       out_list <-  list(
         values = DF[[col]],
-        label = label,
+        label = the_labels[which(colnames(DF)==col)],
         categoryorder = "array",
         categoryarray = categoryarray
       )
@@ -109,7 +125,7 @@ plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T){
     }),
     line = list(
       shape = line_shape,
-      color = color_palette_vec[as.numeric(DF[[1]])]  # Use the numeric representation for colors
+      color = color_palette_vec[as.integer(DF[[1]])]  # Use the numeric representation for colors
       # colorscale = colorscale,  # Define the new colorscale
       # cmin =min(as.numeric(DF[[1]])),  # Set min for color scaling
       # cmax = max(as.numeric(DF[[1]]))   # Set max for color scaling

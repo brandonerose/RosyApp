@@ -4,7 +4,13 @@
 \alias{plotly_parcats}
 \title{plotly_parcats}
 \usage{
-plotly_parcats(DF, remove_missing = T, line_shape_curved = T)
+plotly_parcats(
+  DF,
+  remove_missing = T,
+  line_shape_curved = T,
+  numeric_to_factor = T,
+  quantiles = 5
+)
 }
 \description{
 plotly_parcats
