@@ -57,3 +57,10 @@ clone_attr <- function(to,from){
   }
   return(to)
 }
+get_labels <- function(DF){
+  DF %>% names() %>% sapply(function(name){
+    out <- attr(DF[[name]],"label")
+    if(!is.null(out))return(out)
+    return(name)
+  }) %>% as.character()
+}

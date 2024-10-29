@@ -68,13 +68,9 @@ plotly_bar<-function(df,x_col,y_col,name){
 }
 #' @title plotly_parcats
 #' @export
-plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T, numeric_to_factor = T,quantiles = 5){
+plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T, numeric_to_factor = T,quantiles = 5,more_descriptive_label = F){
   line_shape <- "linear"
-  the_labels <- DF %>% names() %>% sapply(function(col){
-    out <- attr(DF[[col]],"label")
-    if(!is.null(out))return(out)
-    return(col)
-    }) %>% as.character()
+  the_labels <- get_labels(DF)
   if(line_shape_curved)line_shape <- "hspline"
   if(remove_missing){
     DF <- na.omit(DF)
@@ -86,12 +82,13 @@ plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T, numeric_t
       return(OUT)
     }) %>% as.data.frame()
   }
+  if(nrow(DF)==0){return(plotly::plotly_empty())}
   DF <- DF %>% lapply(function(col){
     OUT <- col
     if(!is.factor(OUT)){
       if(is.numeric(OUT)){
         if(numeric_to_factor){
-          OUT <- OUT %>% numeric_to_cats(method = "quantile", quantiles = quantiles)
+          OUT <- OUT %>% numeric_to_cats(method = "quantile", quantiles = quantiles, more_descriptive_label = more_descriptive_label)
         }
       }else{
         OUT <- as.factor(OUT)
@@ -102,17 +99,16 @@ plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T, numeric_t
   adj_margins_l <- adjust_margins(max(nchar(as.character(DF[[1]]))))
   adj_margins_r <- adjust_margins(max(nchar(as.character(DF[[ncol(DF)]]))))
   color_palette <- RColorBrewer::brewer.pal(12, "Paired")  # Using 3 colors for "High", "Medium", "Low"
-  color_palette_vec <- color_palette %>% sample(size = length(unique(DF[[1]])),replace =  length(unique(DF[[1]])))
+  color_palette_vec <- color_palette %>% sample(size = length(levels(DF[[1]])),replace =  length(levels(DF[[1]])))
   fig <- plotly::plot_ly(
     # data = DF,
     # x = x_col,
     # y = y_col,
     type = 'parcats',
     dimensions = lapply(colnames(DF), function(col) {
+      categoryarray <- as.character(unique(DF[[col]]))
       if(is.factor(DF[[col]])){
-        categoryarray <- levels(DF[[col]])
-      }else{
-        categoryarray <- as.character(unique(DF[[col]]))
+        categoryarray <- categoryarray[match( levels(DF[[col]]), categoryarray)] %>% drop_nas()
       }
       out_list <-  list(
         values = DF[[col]],

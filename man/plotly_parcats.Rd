@@ -9,7 +9,8 @@ plotly_parcats(
   remove_missing = T,
   line_shape_curved = T,
   numeric_to_factor = T,
-  quantiles = 5
+  quantiles = 5,
+  more_descriptive_label = F
 )
 }
 \description{
