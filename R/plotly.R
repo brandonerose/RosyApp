@@ -109,7 +109,6 @@ plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T, numeric_t
     # y = y_col,
     type = 'parcats',
     dimensions = lapply(colnames(DF), function(col) {
-
       if(is.factor(DF[[col]])){
         categoryarray <- levels(DF[[col]])
       }else{
