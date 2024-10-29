@@ -114,7 +114,7 @@ plotly_parcats<-function(DF, remove_missing = T,line_shape_curved = T, numeric_t
         values = DF[[col]],
         label = the_labels[which(colnames(DF)==col)],
         categoryorder = "array",
-        categoryarray = categoryarray
+        categoryarray = categoryarray %>% rev()
       )
       return(out_list)
     }),
