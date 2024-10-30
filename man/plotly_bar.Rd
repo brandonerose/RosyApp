@@ -4,7 +4,7 @@
 \alias{plotly_bar}
 \title{plotly_bar}
 \usage{
-plotly_bar(df, x_col, y_col, name)
+plotly_bar(DF, x_col, y_col, name)
 }
 \description{
 plotly_bar

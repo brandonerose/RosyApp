@@ -1,7 +1,8 @@
+#' @import RosyUtils
 #' @title make_table1
 #' @export
 make_table1<-function(
-    df_table,
+    DF,
     group = "no_choice",
     variables,
     render.missing = F
@@ -11,18 +12,33 @@ make_table1<-function(
   if(!is_something(variables))return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
   # caption  <- "Basic stats"
   # footnote <- "ᵃ Also known as Breslow thickness"
+  BAD <- variables %>% vec1_not_in_vec2(colnames(DF))
+  if(length(BAD)>0){
+    variables <- variables[which(!variables%in%BAD)]
+    warning("Following variables dropped (not included in DF): " %>% paste0(as_comma_string(BAD)),immediate. = T)
+  }
+  if(!is_something(variables))return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
+  DF <- DF[,index_na(DF,invert = T)]
+  BAD <- variables %>% vec1_not_in_vec2(colnames(DF))
+  if(length(BAD)>0){
+    variables <- variables[which(!variables%in%BAD)]
+    warning("Following variables dropped (only NAs in DF): " %>% paste0(as_comma_string(BAD)),immediate. = T)
+  }
+  if(!is_something(variables))return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
   if(has_group){
-    df_table$group <-  df_table[[group]] %>% factor()
-    df_table <- df_table[which(!is.na(df_table$group)),] %>% clone_attr(from = df_table)
+    if(!group%in%colnames(DF))stop("`group` not included in DF colnames")
+    if(!is.factor(DF[[group]]))DF$group <-  DF[[group]] %>% factor()
+    DF <- DF[which(!is.na(DF[[group]])),] %>% clone_attr(from = DF)
     variables<-variables[which(variables!=group)]
   }
+  if(!is_something(variables))return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
   forumla <- paste0(variables, collapse = " + ")
-  if(has_group)forumla <- paste0(forumla, " | group")
+  if(has_group)forumla <- paste0(forumla, " | ",group)
   forumla <- as.formula(paste0("~",forumla))
   if(render.missing){
-    table1::table1(forumla,data=df_table)
+    table1::table1(forumla,data=DF)
   }else{
-    table1::table1(forumla,data=df_table,render.missing=NULL)
+    table1::table1(forumla,data=DF,render.missing=NULL)
   }
 }
 save_table1 <- function(table1,filepath){
@@ -56,4 +72,46 @@ clone_attr <- function(to,from){
     }
   }
   return(to)
+}
+get_labels <- function(DF){
+  DF %>% names() %>% sapply(function(name){
+    out <- attr(DF[[name]],"label")
+    if(!is.null(out))return(out)
+    return(name)
+  }) %>% as.character()
+}
+#' @title make_DT_table
+#' @export
+make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY = F,searching = T){
+  if(!is_something(DF)){
+    return(h3("No data available to display."))
+  }
+  DF %>% DT::datatable(
+    selection = selection,
+    editable = editable,
+    rownames = F,
+    fillContainer = T,
+    # extensions = 'Buttons',
+    options = list(
+      columnDefs = list(list(className = 'dt-center',targets = "_all")),
+      paging = paging,
+      pageLength = 50,
+      fixedColumns = FALSE,
+      ordering = TRUE,
+      scrollY = scrollY,
+      scrollX = T,
+      # autoWidth = T,
+      searching = searching,
+      dom = 'Bfrtip',
+      # buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+      scrollCollapse = F,
+      stateSave = F
+    ),
+    class = "cell-border",
+    filter = 'top',
+    escape =F
+  ) %>% DT::formatStyle(
+    colnames(DF),
+    color = "#000"
+  )
 }

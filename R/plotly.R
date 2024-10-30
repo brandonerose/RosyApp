@@ -1,9 +1,9 @@
 #' @import RosyUtils
 #' @title plotly_bar
 #' @export
-plotly_bar<-function(df,x_col,y_col,name){
+plotly_bar<-function(DF,x_col,y_col,name){
   fig <- plotly::plot_ly(
-    df,
+    DF,
     x = x_col,
     y = y_col,
     type = 'bar',

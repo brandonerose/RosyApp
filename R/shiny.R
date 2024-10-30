@@ -250,38 +250,3 @@ TCD_SF <- function(){
     )
   )
 }
-#' @title make_DT_table
-#' @export
-make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY = F,searching = T){
-  if(!is_something(DF)){
-    return(h3("No data available to display."))
-  }
-  DF %>% DT::datatable(
-    selection = selection,
-    editable = editable,
-    rownames = F,
-    fillContainer = T,
-    # extensions = 'Buttons',
-    options = list(
-      columnDefs = list(list(className = 'dt-center',targets = "_all")),
-      paging = paging,
-      pageLength = 50,
-      fixedColumns = FALSE,
-      ordering = TRUE,
-      scrollY = scrollY,
-      scrollX = T,
-      # autoWidth = T,
-      searching = searching,
-      dom = 'Bfrtip',
-      # buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
-      scrollCollapse = F,
-      stateSave = F
-    ),
-    class = "cell-border",
-    filter = 'top',
-    escape =F
-  ) %>% DT::formatStyle(
-    colnames(DF),
-    color = "#000"
-  )
-}
