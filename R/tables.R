@@ -114,5 +114,24 @@ make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY
   ) %>% DT::formatStyle(
     colnames(DF),
     color = "#000"
-  )
+  ) %>% return()
+}
+#' @title make_DT_table_simple
+#' @export
+make_DT_table_simple<-function(DF){
+  if(!is_something(DF)){
+    return(h3("No data available to display."))
+  }
+  DF %>% DT::datatable() %>% DT::formatStyle(
+    colnames(DF),
+    color = "#000"
+  ) %>% return()
+}
+#' @title make_DT_table_simpler
+#' @export
+make_DT_table_simpler<-function(DF){
+  if(!is_something(DF)){
+    return(h3("No data available to display."))
+  }
+  DF %>% DT::datatable() %>% return()
 }
