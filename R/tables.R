@@ -7,6 +7,7 @@ make_table1<-function(
     variables,
     render.missing = F
 ){
+  if(missing(variables))variables <- colnames(DF)
   has_group <- group!="no_choice"
   # if(any(!x))warning(paste0(x,collapse = ", ")," <- not in the form you specified")
   if(!is_something(variables))return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
