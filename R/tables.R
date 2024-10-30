@@ -37,9 +37,9 @@ make_table1<-function(
   if(has_group)forumla <- paste0(forumla, " | ",group)
   forumla <- as.formula(paste0("~",forumla))
   if(render.missing){
-    table1::table1(forumla,data=DF)
+    table1::table1(forumla,data=DF, big.mark=",")
   }else{
-    table1::table1(forumla,data=DF,render.missing=NULL)
+    table1::table1(forumla,data=DF,big.mark=",",render.missing=NULL)
   }
 }
 save_table1 <- function(table1,filepath){
