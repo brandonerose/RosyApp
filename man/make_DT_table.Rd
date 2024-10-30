@@ -9,7 +9,7 @@ make_DT_table(
   editable = F,
   selection = "single",
   paging = TRUE,
-  scrollY = T,
+  scrollY = F,
   searching = T
 )
 }
