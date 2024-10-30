@@ -91,7 +91,7 @@ make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY
     selection = selection,
     editable = editable,
     rownames = F,
-    # fillContainer = T,
+    fillContainer = T,
     # extensions = 'Buttons',
     options = list(
       columnDefs = list(list(className = 'dt-center',targets = "_all")),
