@@ -19,7 +19,7 @@ make_table1<-function(
     warning("Following variables dropped (not included in DF): " %>% paste0(as_comma_string(BAD)),immediate. = T)
   }
   if(!is_something(variables))return(h3("Nothing to return!")) # stop("Provide variable names of at least length 1!")
-  DF <- DF[,index_na(DF,invert = T)]
+  DF <- DF[,index_na(DF,invert = T),drop = F]
   BAD <- variables %>% vec1_not_in_vec2(colnames(DF))
   if(length(BAD)>0){
     variables <- variables[which(!variables%in%BAD)]
