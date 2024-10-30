@@ -83,7 +83,7 @@ get_labels <- function(DF){
 }
 #' @title make_DT_table
 #' @export
-make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY = F,searching = T){
+make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY = T,searching = T){
   if(!is_something(DF)){
     return(h3("No data available to display."))
   }
@@ -96,7 +96,7 @@ make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY
     options = list(
       columnDefs = list(list(className = 'dt-center',targets = "_all")),
       paging = paging,
-      pageLength = 50,
+      pageLength = 20,
       fixedColumns = FALSE,
       ordering = TRUE,
       scrollY = scrollY,
@@ -110,7 +110,7 @@ make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY
     ),
     class = "cell-border",
     filter = 'top',
-    escape =F
+    escape = F
   ) %>% DT::formatStyle(
     colnames(DF),
     color = "#000"
