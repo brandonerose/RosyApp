@@ -58,8 +58,10 @@ clone_attr <- function(to,from){
     for(i in 1:length(units_vec)){
       x <- units_vec[i]
       col <- names(x)
-      if(col%in%to_cols){
-        attr(to[[col]],"units") <- as.character(x)
+      if(is_something(x)){
+        if(col%in%to_cols){
+          attr(to[[col]],"units") <- as.character(x)
+        }
       }
     }
   }
@@ -67,8 +69,10 @@ clone_attr <- function(to,from){
     for(i in 1:length(label_vec)){
       x <- label_vec[i]
       col <- names(x)
-      if(col%in%to_cols){
-        attr(to[[col]],"label") <- as.character(x)
+      if(is_something(x)){
+        if(col%in%to_cols){
+          attr(to[[col]],"label") <- as.character(x)
+        }
       }
     }
   }
