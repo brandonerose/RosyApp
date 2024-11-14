@@ -13,6 +13,7 @@ Imports:
     DT,
     easyalluvial,
     flextable,
+    ggplot2,
     golem,
     listviewer,
     magrittr,
@@ -23,6 +24,8 @@ Imports:
     shiny,
     shinydashboard,
     shinydashboardPlus,
+    stringr,
+    survival,
     survminer,
     table1
 Remotes: 
