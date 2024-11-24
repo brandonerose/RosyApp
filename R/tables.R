@@ -89,7 +89,18 @@ get_labels <- function(DF){
 #' @export
 make_DT_table<-function(DF,editable = F,selection="single",paging = TRUE,scrollY = F,searching = T){
   if(!is_something(DF)){
-    return(h3("No data available to display."))
+    return(
+      DT::datatable(
+        data.frame(x = " ")[0,,drop = F],
+        options = list(
+          dom = 't',        # Simplify the table appearance
+          paging = FALSE,   # Disable pagination
+          ordering = FALSE # Disable ordering
+        ),
+        rownames = FALSE,
+        colnames = " "
+      )
+    )
   }
   DF %>% DT::datatable(
     selection = selection,
